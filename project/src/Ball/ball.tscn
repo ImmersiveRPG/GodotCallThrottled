@@ -10,6 +10,8 @@ albedo_color = Color(1, 0, 0, 1)
 material = SubResource("StandardMaterial3D_d4ebc")
 radius = 1.0
 height = 2.0
+radial_segments = 16
+rings = 8
 
 [node name="Ball" type="RigidBody3D"]
 
