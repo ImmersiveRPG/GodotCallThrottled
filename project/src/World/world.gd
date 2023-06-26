@@ -20,6 +20,8 @@ func _on_fps_timer_timeout() -> void:
 	self.get_window().set_title(title)
 
 func _on_button_spawn_balls_pressed() -> void:
+	var before := Time.get_ticks_msec()
+
 	for n in 500:
 		# Add ball
 		var ball := _ball_scene.instantiate()
@@ -32,6 +34,10 @@ func _on_button_spawn_balls_pressed() -> void:
 			3.0,
 			randf_range(-r, r),
 		)
+
+	var after := Time.get_ticks_msec()
+	var used := after - before
+	print("Blocked for msecs: %s" % [used])
 
 func _on_button_spawn_balls_throttled_pressed() -> void:
 	var cb := func():
