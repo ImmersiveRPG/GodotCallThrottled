@@ -14,3 +14,7 @@ config/name="Example Godot Throttle"
 run/main_scene="res://src/World/world.tscn"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
+
+[autoload]
+
+Throttler="*res://src/Singletons/Throttler.gd"
