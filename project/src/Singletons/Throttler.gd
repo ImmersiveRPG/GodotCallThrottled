@@ -57,7 +57,7 @@ func _start_loop(target_fps : int, frame_budget_threshold_msec : int) -> void:
 		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001
 		await get_tree().create_timer(sleep_sec).timeout
 
-func start(target_fps : int, frame_budget_threshold_msec := 5) -> void:
+func start(target_fps : int, frame_budget_threshold_msec : int) -> void:
 	_is_running = true
 
 	self.call_deferred("_start_loop", target_fps, frame_budget_threshold_msec)
