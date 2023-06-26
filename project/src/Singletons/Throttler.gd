@@ -8,9 +8,7 @@ var _is_running := false
 var _to_call_out := []
 var _mutex_out := Mutex.new()
 
-func _start_loop(target_fps : int, frame_budget_threshold_msec : int) -> void:
-	var frame_budget_msec := int(1000 / target_fps)
-	#var frame_budget_threshold_msec := frame_budget_threshold_msec
+func _start_loop(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	var consecutive_no_work_count := 0
 
 	while _is_running:
@@ -57,10 +55,10 @@ func _start_loop(target_fps : int, frame_budget_threshold_msec : int) -> void:
 		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001
 		await get_tree().create_timer(sleep_sec).timeout
 
-func start(target_fps : int, frame_budget_threshold_msec : int) -> void:
+func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_is_running = true
 
-	self.call_deferred("_start_loop", target_fps, frame_budget_threshold_msec)
+	self.call_deferred("_start_loop", frame_budget_msec, frame_budget_threshold_msec)
 
 func stop() -> void:
 	_is_running = false
