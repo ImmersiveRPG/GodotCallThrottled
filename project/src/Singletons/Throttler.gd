@@ -5,55 +5,49 @@
 extends Node3D
 
 var _is_running := false
-var _to_call_out := []
-var _mutex_out := Mutex.new()
+var _to_call := []
+var _mutex := Mutex.new()
 
 func _start_loop(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
-	var consecutive_no_work_count := 0
-
 	while _is_running:
+		# Wait here until the next process frame starts
+		await self.get_tree().process_frame
+
 		var frame_budget_remaining_msec := frame_budget_msec
-		var is_sleeping := false
+		var frame_budget_used_msec := 0
+		var is_working := true
 		var call_count := 0
-		while not is_sleeping:
-			#yield(get_tree().create_timer(0.1), "timeout")
+		while is_working:
 			var before := Time.get_ticks_msec()
 
-			_mutex_out.lock()
-			var entry = _to_call_out.pop_front()
-			_mutex_out.unlock()
+			# Get the next callable
+			_mutex.lock()
+			var entry = _to_call.pop_front()
+			_mutex.unlock()
 
-			var callable = null
-			var args = null
+			var did_call := false
 			if entry:
-				callable = entry["callable"]
-				args = entry["args"]
+				var callable = entry["callable"]
+				var args = entry["args"]
 				if callable != null and callable.is_valid():
 					if args != null and typeof(args) == TYPE_ARRAY and not args.is_empty():
-						#FIXME print(entry)
 						callable.callv(args)
 					else:
 						callable.call()
+					did_call = true
 					call_count += 1
-					consecutive_no_work_count = 0
-					#yield(get_tree().create_timer(0.1), "timeout")
 
 			var after := Time.get_ticks_msec()
 			var used := after - before
 			frame_budget_remaining_msec -= used
-			#print("Used:%s, frame_budget_remaining_msec:%s" % [used, frame_budget_remaining_msec])
+			frame_budget_used_msec += used
 
-			# Sleep if there is no work to do, or the budget is below the threshold
-			if callable == null or frame_budget_remaining_msec < frame_budget_threshold_msec:
-				is_sleeping = true
-				consecutive_no_work_count += 1
+			# Stop running callables if there are none left, or we are over budget
+			if not did_call or frame_budget_remaining_msec < frame_budget_threshold_msec:
+				is_working = false
 
 		if call_count > 0:
-			print("frame_budget_remaining_msec:%s, call_count:%s" % [frame_budget_remaining_msec, call_count])
-
-		# Sleep, and do it longer if we had no work for X consecutive loops
-		var sleep_sec := 0.05 if consecutive_no_work_count > 10 else 0.001
-		await get_tree().create_timer(sleep_sec).timeout
+			print("budget:%s, used:%s, remaining:%s, calls:%s" % [frame_budget_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_is_running = true
@@ -69,6 +63,6 @@ func call_throttled(cb : Callable, args := []) -> void:
 		"args" : args,
 	}
 
-	_mutex_out.lock()
-	_to_call_out.push_back(entry)
-	_mutex_out.unlock()
+	_mutex.lock()
+	_to_call.push_back(entry)
+	_mutex.unlock()
