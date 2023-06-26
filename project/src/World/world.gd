@@ -6,6 +6,8 @@ extends Node3D
 
 const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 
+@onready var _ball_holder : Node = $BallHolder
+
 func _init() -> void:
 	Throttler.start(60, 5)
 
@@ -18,7 +20,7 @@ func _on_button_spawn_balls_pressed() -> void:
 	for n in 500:
 		# Add ball
 		var ball := _ball_scene.instantiate()
-		self.add_child(ball)
+		_ball_holder.add_child(ball)
 
 		# Give ball random position around center
 		const r := 25.0
@@ -32,7 +34,7 @@ func _on_button_spawn_balls_throttled_pressed() -> void:
 	var cb := func():
 		# Add ball
 		var ball := _ball_scene.instantiate()
-		self.add_child(ball)
+		_ball_holder.add_child(ball)
 
 		# Give ball random position around center
 		const r := 25.0
@@ -50,7 +52,7 @@ func _on_button_spawn_balls_deferred_pressed() -> void:
 	var cb := func():
 		# Add ball
 		var ball := _ball_scene.instantiate()
-		self.add_child(ball)
+		_ball_holder.add_child(ball)
 
 		# Give ball random position around center
 		const r := 25.0
@@ -62,3 +64,8 @@ func _on_button_spawn_balls_deferred_pressed() -> void:
 
 	for n in 500:
 		cb.call_deferred()
+
+
+func _on_button_remove_all_balls_pressed() -> void:
+	for ball in _ball_holder.get_children():
+		ball.queue_free()

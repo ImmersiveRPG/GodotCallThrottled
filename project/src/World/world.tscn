@@ -35,17 +35,24 @@ far = 10000.0
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(-2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025, -1, 1.77636e-15, -4.37114e-08, 0, 10, 0)
 
-[node name="ButtonSpawnBallsBlocking" type="Button" parent="."]
-offset_left = 45.0
-offset_top = 30.0
-offset_right = 176.0
+[node name="ButtonRemoveAllBalls" type="Button" parent="."]
+offset_left = 34.0
+offset_top = 31.0
+offset_right = 177.0
 offset_bottom = 79.0
+text = "Remove All Balls"
+
+[node name="ButtonSpawnBallsBlocking" type="Button" parent="."]
+offset_left = 204.0
+offset_top = 33.0
+offset_right = 335.0
+offset_bottom = 82.0
 text = "Spawn Balls"
 
 [node name="ButtonSpawnBallsThrottled" type="Button" parent="."]
-offset_left = 298.0
+offset_left = 371.0
 offset_top = 33.0
-offset_right = 505.0
+offset_right = 578.0
 offset_bottom = 82.0
 text = "Spawn Balls Throttled"
 
@@ -55,9 +62,6 @@ offset_top = 33.0
 offset_right = 823.0
 offset_bottom = 82.0
 text = "Spawn Balls Deferred"
-
-[node name="Ball" parent="." instance=ExtResource("2_538xr")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
@@ -73,6 +77,12 @@ skeleton = NodePath("../../..")
 wait_time = 0.5
 autostart = true
 
+[node name="BallHolder" type="Node" parent="."]
+
+[node name="Ball" parent="BallHolder" instance=ExtResource("2_538xr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[connection signal="pressed" from="ButtonRemoveAllBalls" to="." method="_on_button_remove_all_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsBlocking" to="." method="_on_button_spawn_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsThrottled" to="." method="_on_button_spawn_balls_throttled_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsDeferred" to="." method="_on_button_spawn_balls_deferred_pressed"]
