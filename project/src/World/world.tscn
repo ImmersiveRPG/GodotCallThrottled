@@ -1,0 +1,63 @@
+[gd_scene load_steps=9 format=3 uid="uid://445senvxy3xb"]
+
+[ext_resource type="Script" path="res://src/World/world.gd" id="1_iii4f"]
+[ext_resource type="PackedScene" uid="uid://dc5ou3l5db153" path="res://src/Ball/ball.tscn" id="2_538xr"]
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_7bmdo"]
+
+[sub_resource type="Sky" id="Sky_q6v6y"]
+sky_material = SubResource("PhysicalSkyMaterial_7bmdo")
+
+[sub_resource type="Environment" id="Environment_w0x3e"]
+background_mode = 2
+sky = SubResource("Sky_q6v6y")
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ximha"]
+size = Vector3(100, 4, 100)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlal2"]
+albedo_color = Color(0.380392, 0.921569, 0.584314, 1)
+
+[sub_resource type="BoxMesh" id="BoxMesh_snr4j"]
+material = SubResource("StandardMaterial3D_dlal2")
+size = Vector3(100, 4, 100)
+
+[node name="World" type="Node3D"]
+script = ExtResource("1_iii4f")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_w0x3e")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 0.965926, 0.258819, 0, -0.258819, 0.965926, 0, 12, 13)
+far = 10000.0
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025, -1, 1.77636e-15, -4.37114e-08, 0, 10, 0)
+
+[node name="ButtonSpawnBalls" type="Button" parent="."]
+offset_left = 48.0
+offset_top = 35.0
+offset_right = 155.0
+offset_bottom = 66.0
+text = "Spawn Balls"
+
+[node name="Ball" parent="." instance=ExtResource("2_538xr")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="StaticBody3D"]
+shape = SubResource("BoxShape3D_ximha")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="StaticBody3D/CollisionShape3D"]
+mesh = SubResource("BoxMesh_snr4j")
+skeleton = NodePath("../../..")
+
+[node name="FPSTimer" type="Timer" parent="."]
+wait_time = 0.5
+autostart = true
+
+[connection signal="pressed" from="ButtonSpawnBalls" to="." method="_on_button_spawn_balls_pressed"]
+[connection signal="timeout" from="FPSTimer" to="." method="_on_fps_timer_timeout"]
