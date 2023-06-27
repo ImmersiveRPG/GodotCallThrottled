@@ -50,17 +50,17 @@ offset_bottom = 78.0
 text = "Spawn Balls Normal"
 
 [node name="ButtonSpawnBallsThrottled" type="Button" parent="."]
-offset_left = 452.0
-offset_top = 32.0
-offset_right = 659.0
-offset_bottom = 81.0
+offset_left = 690.0
+offset_top = 31.0
+offset_right = 897.0
+offset_bottom = 80.0
 text = "Spawn Balls Throttled"
 
 [node name="ButtonSpawnBallsDeferred" type="Button" parent="."]
-offset_left = 684.0
-offset_top = 32.0
-offset_right = 891.0
-offset_bottom = 81.0
+offset_left = 446.0
+offset_top = 28.0
+offset_right = 653.0
+offset_bottom = 77.0
 text = "Spawn Balls Deferred"
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
