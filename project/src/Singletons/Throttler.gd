@@ -4,58 +4,59 @@
 
 extends Node3D
 
-var _is_running := false
+
 var _to_call := []
 var _mutex := Mutex.new()
 
-func _start_loop(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
-	while _is_running:
-		# Wait here until the next process frame starts
-		await self.get_tree().process_frame
+var _frame_budget_msec := 0
+var _frame_budget_threshold_msec := 0
+var _is_setup := false
 
-		var frame_budget_remaining_msec := frame_budget_msec
-		var frame_budget_used_msec := 0
-		var is_working := true
-		var call_count := 0
-		while is_working:
-			var before := Time.get_ticks_msec()
+func _run_callables() -> void:
+	if not _is_setup:
+		push_error("Please run Throttler.start before calling")
+		return
 
-			# Get the next callable
-			_mutex.lock()
-			var entry = _to_call.pop_front()
-			_mutex.unlock()
+	var frame_budget_remaining_msec := _frame_budget_msec
+	var frame_budget_used_msec := 0
+	var is_working := true
+	var call_count := 0
+	while is_working:
+		var before := Time.get_ticks_msec()
 
-			var did_call := false
-			if entry:
-				var callable = entry["callable"]
-				var args = entry["args"]
-				if callable != null and callable.is_valid():
-					if args != null and typeof(args) == TYPE_ARRAY and not args.is_empty():
-						callable.callv(args)
-					else:
-						callable.call()
-					did_call = true
-					call_count += 1
+		# Get the next callable
+		_mutex.lock()
+		var entry = _to_call.pop_front()
+		_mutex.unlock()
 
-			var after := Time.get_ticks_msec()
-			var used := after - before
-			frame_budget_remaining_msec -= used
-			frame_budget_used_msec += used
+		var did_call := false
+		if entry:
+			var callable = entry["callable"]
+			var args = entry["args"]
+			if callable != null and callable.is_valid():
+				if args != null and typeof(args) == TYPE_ARRAY and not args.is_empty():
+					callable.callv(args)
+				else:
+					callable.call()
+				did_call = true
+				call_count += 1
 
-			# Stop running callables if there are none left, or we are over budget
-			if not did_call or frame_budget_remaining_msec < frame_budget_threshold_msec:
-				is_working = false
+		var after := Time.get_ticks_msec()
+		var used := after - before
+		frame_budget_remaining_msec -= used
+		frame_budget_used_msec += used
 
-		if call_count > 0:
-			print("budget:%s, used:%s, remaining:%s, calls:%s" % [frame_budget_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
+		# Stop running callables if there are none left, or we are over budget
+		if not did_call or frame_budget_remaining_msec < _frame_budget_threshold_msec:
+			is_working = false
+
+	if call_count > 0:
+		print("budget:%s, used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
-	_is_running = true
-
-	self.call_deferred("_start_loop", frame_budget_msec, frame_budget_threshold_msec)
-
-func stop() -> void:
-	_is_running = false
+	_frame_budget_msec = frame_budget_msec
+	_frame_budget_threshold_msec = frame_budget_threshold_msec
+	_is_setup = true
 
 func call_throttled(cb : Callable, args := []) -> void:
 	var entry := {

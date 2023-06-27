@@ -43,24 +43,24 @@ offset_bottom = 79.0
 text = "Remove All Balls"
 
 [node name="ButtonSpawnBallsBlocking" type="Button" parent="."]
-offset_left = 204.0
-offset_top = 33.0
-offset_right = 335.0
-offset_bottom = 82.0
-text = "Spawn Balls"
+offset_left = 222.0
+offset_top = 29.0
+offset_right = 403.0
+offset_bottom = 78.0
+text = "Spawn Balls Normal"
 
 [node name="ButtonSpawnBallsThrottled" type="Button" parent="."]
-offset_left = 371.0
-offset_top = 33.0
-offset_right = 578.0
-offset_bottom = 82.0
+offset_left = 452.0
+offset_top = 32.0
+offset_right = 659.0
+offset_bottom = 81.0
 text = "Spawn Balls Throttled"
 
 [node name="ButtonSpawnBallsDeferred" type="Button" parent="."]
-offset_left = 616.0
-offset_top = 33.0
-offset_right = 823.0
-offset_bottom = 82.0
+offset_left = 684.0
+offset_top = 32.0
+offset_right = 891.0
+offset_bottom = 81.0
 text = "Spawn Balls Deferred"
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]

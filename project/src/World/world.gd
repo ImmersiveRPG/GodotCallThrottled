@@ -8,7 +8,7 @@ const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
 
-func _init() -> void:
+func _ready() -> void:
 	var frame_budget_msec := roundi(1000 / Engine.get_physics_ticks_per_second())
 	var frame_budget_threshold_msec := 5
 	Throttler.start(frame_budget_msec, frame_budget_threshold_msec)

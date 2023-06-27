@@ -12,6 +12,7 @@ config_version=5
 
 config/name="Example Godot Throttle"
 run/main_scene="res://src/World/world.tscn"
+run/main_loop_type="CustomSceneTree"
 config/features=PackedStringArray("4.0", "Forward Plus")
 config/icon="res://icon.svg"
 
