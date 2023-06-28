@@ -5,10 +5,6 @@
 extends Node
 
 
-func _process(_delta : float) -> void:
-	var tree = self.get_tree() as CustomSceneTree
-	if tree:
-		tree._process_done()
 
 func _physics_process(_delta : float) -> void:
 	var tree = self.get_tree() as CustomSceneTree

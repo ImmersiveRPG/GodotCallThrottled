@@ -6,12 +6,12 @@ extends SceneTree
 
 class_name CustomSceneTree
 
-
+const INT32_MAX := int(int(pow(2, 31)) - 1)
 var _throttler = null
 var _physics_process_start_ticks := 0
 var _physics_process_end_ticks := 0
-var _process_start_ticks := 0
-var _process_end_ticks := 0
+
+
 var _last_node_scene := preload("res://src/LastNode/LastNode.tscn")
 var _last_node = null
 
@@ -22,13 +22,10 @@ func _finalize() -> void:
 	print("Main Loop Finalized")
 	pass
 
-func _process(_delta : float) -> bool:
-	_process_start_ticks = Time.get_ticks_msec()
-	return false
-
 func _physics_process(_delta : float) -> bool:
 	#OS.delay_msec(1000)
 	_physics_process_start_ticks = Time.get_ticks_msec()
+
 	#print("_physics_process_start_ticks: %s" % [_physics_process_start_ticks])
 
 	# The Throttler singleton may not be loaded yet, so we manually check for it here
@@ -56,19 +53,12 @@ func _physics_process(_delta : float) -> bool:
 	#OS.delay_msec(1000)
 	return false
 
-func _process_done() -> void:
-	_process_end_ticks = Time.get_ticks_msec()
-	#print("_process_end_ticks: %s" % [_process_end_ticks])
-
 func _physics_process_done() -> void:
 	_physics_process_end_ticks = Time.get_ticks_msec()
-	#print("_physics_process_end_ticks: %s" % [_physics_process_end_ticks])
-	var used_physics_ticks := _physics_process_end_ticks - _physics_process_start_ticks
-	var used_process_ticks := _process_end_ticks - _process_start_ticks
-	#print("physics frame time: %s" % [used_physics_ticks])
+	var used_physics_ticks := clampi(_physics_process_end_ticks - _physics_process_start_ticks, 0, INT32_MAX)
 
 	# Run callables
 	if _throttler and _throttler._is_setup:
-		_throttler._run_callables(used_physics_ticks, used_process_ticks)
+		_throttler._run_callables(used_physics_ticks)
 
 
