@@ -10,6 +10,8 @@ class_name CustomSceneTree
 var _throttler = null
 var _physics_process_start_ticks := 0
 var _physics_process_end_ticks := 0
+var _process_start_ticks := 0
+var _process_end_ticks := 0
 var _last_node_scene := preload("res://src/LastNode/LastNode.tscn")
 var _last_node = null
 
@@ -19,6 +21,10 @@ func _initialize() -> void:
 func _finalize() -> void:
 	print("Main Loop Finalized")
 	pass
+
+func _process(_delta : float) -> bool:
+	_process_start_ticks = Time.get_ticks_msec()
+	return false
 
 func _physics_process(_delta : float) -> bool:
 	#OS.delay_msec(1000)
@@ -50,19 +56,19 @@ func _physics_process(_delta : float) -> bool:
 	#OS.delay_msec(1000)
 	return false
 
+func _process_done() -> void:
+	_process_end_ticks = Time.get_ticks_msec()
+	#print("_process_end_ticks: %s" % [_process_end_ticks])
+
 func _physics_process_done() -> void:
 	_physics_process_end_ticks = Time.get_ticks_msec()
 	#print("_physics_process_end_ticks: %s" % [_physics_process_end_ticks])
 	var used_physics_ticks := _physics_process_end_ticks - _physics_process_start_ticks
+	var used_process_ticks := _process_end_ticks - _process_start_ticks
 	#print("physics frame time: %s" % [used_physics_ticks])
 
 	# Run callables
 	if _throttler and _throttler._is_setup:
-		_throttler._run_callables(used_physics_ticks)
-
-func _process(_delta : float) -> bool:
-	#print("++++ _process: %s" % [Time.get_ticks_msec()])
-
-	return false
+		_throttler._run_callables(used_physics_ticks, used_process_ticks)
 
 

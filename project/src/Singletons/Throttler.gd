@@ -13,12 +13,12 @@ var _frame_budget_msec := 0
 var _frame_budget_threshold_msec := 0
 var _is_setup := false
 
-func _run_callables(used_physics_msec : float) -> void:
+func _run_callables(used_physics_msec : float, used_process_msec : float) -> void:
 	if not _is_setup:
 		push_error("Please run Throttler.start before calling")
 		return
 
-	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, INT32_MAX)
+	var frame_budget_remaining_msec := clampi(_frame_budget_msec - (used_physics_msec + used_process_msec), 0, INT32_MAX)
 	var frame_budget_used_msec := 0
 	var is_working := true
 	var call_count := 0
@@ -53,7 +53,7 @@ func _run_callables(used_physics_msec : float) -> void:
 			is_working = false
 
 	if call_count > 0:
-		print("budget:%s, physics_used:%s, throttle_used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, used_physics_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
+		print("budget:%s, physics_used:%s, process_used:%s, throttle_used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, used_physics_msec, used_process_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec
