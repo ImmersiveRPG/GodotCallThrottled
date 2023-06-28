@@ -29,10 +29,6 @@ func _physics_process(_delta : float) -> bool:
 	if _throttler == null:
 		_throttler = self.root.get_node_or_null("Throttler")
 
-	# Run callables
-	if _throttler and _throttler._is_setup:
-		_throttler._run_callables()
-
 	# Just return if there isn't a scene yet
 	var target = self.current_scene
 	if not target: return false
@@ -58,6 +54,10 @@ func _physics_process_done() -> void:
 	_physics_process_end_ticks = Time.get_ticks_msec()
 	#print("_physics_process_end_ticks: %s" % [_physics_process_end_ticks])
 	print("physics frame time: %s" % [_physics_process_end_ticks - _physics_process_start_ticks])
+
+	# Run callables
+	if _throttler and _throttler._is_setup:
+		_throttler._run_callables()
 
 func _process(_delta : float) -> bool:
 	#print("++++ _process: %s" % [Time.get_ticks_msec()])
