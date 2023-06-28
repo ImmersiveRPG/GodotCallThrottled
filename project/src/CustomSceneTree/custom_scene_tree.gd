@@ -20,7 +20,8 @@ func _physics_process(_delta : float) -> bool:
 	#print("!!!!!! _physics_process")
 	if _throttler == null:
 		_throttler = self.root.get_node_or_null("Throttler")
-	if _throttler._is_setup:
+
+	if _throttler and _throttler._is_setup:
 		_throttler._run_callables()
 
 	return false
