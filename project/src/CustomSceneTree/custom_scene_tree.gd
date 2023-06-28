@@ -18,9 +18,12 @@ func _finalize() -> void:
 
 func _physics_process(_delta : float) -> bool:
 	#print("!!!!!! _physics_process")
+
+	# The Throttler singleton may not be loaded yet, so we manually check for it here
 	if _throttler == null:
 		_throttler = self.root.get_node_or_null("Throttler")
 
+	# Run callables
 	if _throttler and _throttler._is_setup:
 		_throttler._run_callables()
 
