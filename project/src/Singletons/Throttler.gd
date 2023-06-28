@@ -7,21 +7,23 @@ extends Node3D
 
 var _to_call := []
 var _mutex := Mutex.new()
+const INT32_MAX := int(int(pow(2, 31)) - 1)
 
 var _frame_budget_msec := 0
 var _frame_budget_threshold_msec := 0
 var _is_setup := false
 
-func _run_callables() -> void:
+func _run_callables(used_physics_msec : float) -> void:
 	if not _is_setup:
 		push_error("Please run Throttler.start before calling")
 		return
 
-	var frame_budget_remaining_msec := _frame_budget_msec
+	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, INT32_MAX)
 	var frame_budget_used_msec := 0
 	var is_working := true
 	var call_count := 0
-	while is_working:
+	var has_reasonable_starting_budget : = frame_budget_remaining_msec - _frame_budget_threshold_msec > 0
+	while has_reasonable_starting_budget and is_working:
 		var before := Time.get_ticks_msec()
 
 		# Get the next callable
@@ -51,7 +53,7 @@ func _run_callables() -> void:
 			is_working = false
 
 	if call_count > 0:
-		print("budget:%s, used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
+		print("budget:%s, physics_used:%s, throttle_used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, used_physics_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec

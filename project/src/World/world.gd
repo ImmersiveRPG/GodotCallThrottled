@@ -13,6 +13,8 @@ func _ready() -> void:
 	var frame_budget_threshold_msec := 5
 	Throttler.start(frame_budget_msec, frame_budget_threshold_msec)
 
+func _physics_process(_delta : float) -> void:
+	OS.delay_msec(5)
 
 func _on_fps_timer_timeout() -> void:
 	var fps := Engine.get_frames_per_second()

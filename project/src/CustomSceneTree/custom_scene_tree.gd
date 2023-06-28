@@ -53,11 +53,12 @@ func _physics_process(_delta : float) -> bool:
 func _physics_process_done() -> void:
 	_physics_process_end_ticks = Time.get_ticks_msec()
 	#print("_physics_process_end_ticks: %s" % [_physics_process_end_ticks])
-	print("physics frame time: %s" % [_physics_process_end_ticks - _physics_process_start_ticks])
+	var used_physics_ticks := _physics_process_end_ticks - _physics_process_start_ticks
+	#print("physics frame time: %s" % [used_physics_ticks])
 
 	# Run callables
 	if _throttler and _throttler._is_setup:
-		_throttler._run_callables()
+		_throttler._run_callables(used_physics_ticks)
 
 func _process(_delta : float) -> bool:
 	#print("++++ _process: %s" % [Time.get_ticks_msec()])
