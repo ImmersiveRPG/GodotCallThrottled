@@ -12,7 +12,7 @@ var _physics_process_start_ticks := 0
 var _physics_process_end_ticks := 0
 
 
-var _last_node_scene := preload("res://src/LastNode/LastNode.tscn")
+var _last_node_scene := preload("res://src/LastNode/last_node.tscn")
 var _last_node = null
 
 func _initialize() -> void:
