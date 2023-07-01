@@ -6,7 +6,9 @@ extends Node
 
 
 
-func _physics_process(_delta : float) -> void:
+func _process(_delta : float) -> void:
 	var tree = self.get_tree() as CustomSceneTree
 	if tree:
-		tree._physics_process_done()
+		tree._main_iteration_done()
+
+

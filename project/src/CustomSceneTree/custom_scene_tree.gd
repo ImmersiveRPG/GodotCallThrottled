@@ -8,8 +8,8 @@ class_name CustomSceneTree
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
 var _throttler = null
-var _physics_process_start_ticks := 0
-var _physics_process_end_ticks := 0
+var _main_iteration_start_ticks := 0
+var _main_iteration_end_ticks := 0
 
 
 var _last_node_scene := preload("res://src/LastNode/last_node.tscn")
@@ -22,11 +22,11 @@ func _finalize() -> void:
 	print("Main Loop Finalized")
 	pass
 
-func _physics_process(_delta : float) -> bool:
-	#OS.delay_msec(1000)
-	_physics_process_start_ticks = Time.get_ticks_msec()
 
-	#print("_physics_process_start_ticks: %s" % [_physics_process_start_ticks])
+func _physics_process(_delta : float) -> bool:
+	print("Frame: %s" % [self.get_frame()])
+
+	self._main_iteration_start()
 
 	# The Throttler singleton may not be loaded yet, so we manually check for it here
 	if _throttler == null:
@@ -40,7 +40,7 @@ func _physics_process(_delta : float) -> bool:
 	if not is_instance_valid(_last_node):
 		_last_node = null
 
-	# Create the last node in tree
+	# Create the dummy last node in tree
 	if not _last_node:
 		_last_node = _last_node_scene.instantiate()
 		target.add_child(_last_node)
@@ -49,16 +49,19 @@ func _physics_process(_delta : float) -> bool:
 	if _last_node.get_index() != target.get_child_count()-1:
 		target.move_child(_last_node, target.get_child_count()-1)
 
-	#print("---- end _physics_process: %s" % [Time.get_ticks_msec()])
-	#OS.delay_msec(1000)
 	return false
 
-func _physics_process_done() -> void:
-	_physics_process_end_ticks = Time.get_ticks_msec()
-	var used_physics_ticks := clampi(_physics_process_end_ticks - _physics_process_start_ticks, 0, INT32_MAX)
+
+func _main_iteration_start() -> void:
+	_main_iteration_start_ticks = Time.get_ticks_msec()
+	_main_iteration_end_ticks = _main_iteration_start_ticks
+	print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
+
+func _main_iteration_done() -> void:
+	_main_iteration_end_ticks = Time.get_ticks_msec()
+	print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
+	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
 
 	# Run callables
 	if _throttler and _throttler._is_setup:
 		_throttler._run_callables(used_physics_ticks)
-
-

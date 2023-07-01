@@ -14,9 +14,11 @@ func _ready() -> void:
 	Throttler.start(frame_budget_msec, frame_budget_threshold_msec)
 
 func _process(_delta : float) -> void:
+	print("    world _process: %s" % [Time.get_ticks_msec()])
 	OS.delay_msec(2)
 
 func _physics_process(_delta : float) -> void:
+	print("    world _physics_process: %s" % [Time.get_ticks_msec()])
 	OS.delay_msec(5)
 
 func _on_fps_timer_timeout() -> void:
@@ -46,7 +48,9 @@ func _on_button_spawn_balls_pressed() -> void:
 	print("Blocked for msecs: %s" % [used])
 
 func _on_button_spawn_balls_deferred_pressed() -> void:
-	var cb := func():
+	print("        button: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
+	var cb_defer := func():
+		print("        cb_defer: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
 		# Add ball
 		var ball := _ball_scene.instantiate()
 		_ball_holder.add_child(ball)
@@ -59,8 +63,29 @@ func _on_button_spawn_balls_deferred_pressed() -> void:
 			randf_range(-r, r),
 		)
 
+	var cb_throt := func():
+		print("        cb_throt a: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
+		#OS.delay_msec(1000)
+		# Add ball
+		var ball := _ball_scene.instantiate()
+		_ball_holder.add_child(ball)
+
+		# Give ball random position around center
+		const r := 25.0
+		ball.transform.origin = Vector3(
+			randf_range(-r, r),
+			3.0,
+			randf_range(-r, r),
+		)
+		print("        cb_throt b: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
+
 	for n in 500:
-		cb.call_deferred()
+		cb_defer.call_deferred()
+
+	for n in 500:
+		Throttler.call_throttled(cb_throt)
+
+	print("        button end: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
 
 func _on_button_spawn_balls_throttled_pressed() -> void:
 	var cb := func():
