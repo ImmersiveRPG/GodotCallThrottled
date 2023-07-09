@@ -19,7 +19,8 @@ var _frame_budget_msec := 0
 var _frame_budget_threshold_msec := 0
 var _is_setup := false
 
-func _loop() -> void:
+func _on_start_physics_frame() -> void:
+	if Global._is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
 	self._main_iteration_start()
 
 	# Just return if there isn't a scene yet
@@ -100,6 +101,7 @@ func _run_callables(already_used_msec : float) -> void:
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec
 	_frame_budget_threshold_msec = frame_budget_threshold_msec
+	self.get_tree().connect("physics_frame", Callable(self, "_on_start_physics_frame"))
 	_is_setup = true
 
 func call_throttled(cb : Callable, args := []) -> void:
