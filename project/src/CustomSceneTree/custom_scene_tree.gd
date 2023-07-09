@@ -32,7 +32,7 @@ func _physics_process(_delta : float) -> bool:
 		_throttler = self.root.get_node_or_null("Throttler")
 
 	# Just return if there isn't a scene yet
-	var target = self.current_scene
+	var target = self.root
 	if not target: return false
 
 	# Forget last node if it has been freed
