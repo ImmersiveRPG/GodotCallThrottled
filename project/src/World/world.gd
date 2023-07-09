@@ -7,6 +7,7 @@ extends Node3D
 const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
+var _is_artificial_delay := false
 
 func _ready() -> void:
 	var frame_budget_msec := roundi(1000 / Engine.get_physics_ticks_per_second())
@@ -15,11 +16,10 @@ func _ready() -> void:
 
 func _process(_delta : float) -> void:
 	if Global._is_logging: print("    world _process: %s" % [Time.get_ticks_msec()])
-	OS.delay_msec(2)
 
 func _physics_process(_delta : float) -> void:
 	if Global._is_logging: print("    world _physics_process: %s" % [Time.get_ticks_msec()])
-	OS.delay_msec(5)
+	if _is_artificial_delay: OS.delay_msec(7)
 
 func _on_fps_timer_timeout() -> void:
 	var fps := Engine.get_frames_per_second()
@@ -90,3 +90,7 @@ func _on_button_spawn_balls_throttled_pressed() -> void:
 func _on_button_remove_all_balls_pressed() -> void:
 	for ball in _ball_holder.get_children():
 		ball.queue_free()
+
+
+func _on_check_box_artificial_delay_pressed() -> void:
+	_is_artificial_delay = not _is_artificial_delay

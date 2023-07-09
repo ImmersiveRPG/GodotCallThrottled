@@ -63,6 +63,13 @@ offset_right = 653.0
 offset_bottom = 77.0
 text = "Spawn Balls Deferred"
 
+[node name="CheckBoxArtificialDelay" type="CheckBox" parent="."]
+offset_left = 53.0
+offset_top = 119.0
+offset_right = 489.0
+offset_bottom = 185.0
+text = "Add artificial delay to world _physics_process"
+
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
 
@@ -86,4 +93,5 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 [connection signal="pressed" from="ButtonSpawnBallsBlocking" to="." method="_on_button_spawn_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsThrottled" to="." method="_on_button_spawn_balls_throttled_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsDeferred" to="." method="_on_button_spawn_balls_deferred_pressed"]
+[connection signal="pressed" from="CheckBoxArtificialDelay" to="." method="_on_check_box_artificial_delay_pressed"]
 [connection signal="timeout" from="FPSTimer" to="." method="_on_fps_timer_timeout"]
