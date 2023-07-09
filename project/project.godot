@@ -10,7 +10,7 @@ config_version=5
 
 [application]
 
-config/name="Example Godot Throttle"
+config/name="Godot Call Throttled"
 run/main_scene="res://src/World/world.tscn"
 run/main_loop_type="CustomSceneTree"
 config/features=PackedStringArray("4.1", "Forward Plus")
