@@ -7,8 +7,5 @@ extends Node
 
 
 func _process(_delta : float) -> void:
-	var tree = self.get_tree() as CustomSceneTree
-	if tree:
-		tree._main_iteration_done()
-
-
+	GodotCallThrottled._main_iteration_done()
+	

@@ -1,6 +1,6 @@
 [gd_scene load_steps=2 format=3 uid="uid://b7fnr64wblq0n"]
 
-[ext_resource type="Script" path="res://src/LastNode/last_node.gd" id="1_yurfi"]
+[ext_resource type="Script" path="res://addons/godot_call_throttled/LastNode/last_node.gd" id="1_yurfi"]
 
 [node name="LastNode" type="Node"]
 script = ExtResource("1_yurfi")
