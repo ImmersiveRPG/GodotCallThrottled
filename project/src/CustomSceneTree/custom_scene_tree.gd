@@ -24,7 +24,7 @@ func _finalize() -> void:
 
 
 func _physics_process(_delta : float) -> bool:
-	print("Frame: %s" % [self.get_frame()])
+	if Global._is_logging: print("Frame: %s" % [self.get_frame()])
 
 	self._main_iteration_start()
 
@@ -55,12 +55,13 @@ func _physics_process(_delta : float) -> bool:
 func _main_iteration_start() -> void:
 	_main_iteration_start_ticks = Time.get_ticks_msec()
 	_main_iteration_end_ticks = _main_iteration_start_ticks
-	print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
+	if Global._is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_msec()
-	print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
+	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
 	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
+	if Global._is_logging: print("    used_physics_ticks: %s" % [used_physics_ticks])
 
 	# Run callables
 	if _throttler and _throttler._is_setup:
