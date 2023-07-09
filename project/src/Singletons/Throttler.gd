@@ -7,7 +7,6 @@ extends Node3D
 
 var _to_call := []
 var _mutex := Mutex.new()
-const INT32_MAX := int(int(pow(2, 31)) - 1)
 
 var _frame_budget_msec := 0
 var _frame_budget_threshold_msec := 0
@@ -18,7 +17,7 @@ func _run_callables(used_physics_msec : float) -> void:
 		push_error("Please run Throttler.start before calling")
 		return
 
-	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, INT32_MAX)
+	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, Global.INT32_MAX)
 	var frame_budget_used_msec := 0
 	var is_working := true
 	var call_count := 0

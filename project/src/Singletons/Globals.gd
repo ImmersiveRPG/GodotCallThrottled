@@ -7,3 +7,4 @@ class_name Global
 
 
 const _is_logging := false
+const INT32_MAX := int(int(pow(2, 31)) - 1)

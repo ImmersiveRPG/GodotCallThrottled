@@ -6,7 +6,6 @@ extends SceneTree
 
 class_name CustomSceneTree
 
-const INT32_MAX := int(int(pow(2, 31)) - 1)
 var _throttler = null
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
@@ -60,7 +59,7 @@ func _main_iteration_start() -> void:
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_msec()
 	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
-	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
+	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, Global.INT32_MAX)
 	if Global._is_logging: print("    used_physics_ticks: %s" % [used_physics_ticks])
 
 	# Run callables
