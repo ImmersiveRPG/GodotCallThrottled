@@ -5,6 +5,8 @@
 extends Node
 #class_name GodotCallThrottled
 
+const INT32_MAX := int(int(pow(2, 31)) - 1)
+
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
 var _last_node_scene := preload("res://addons/godot_call_throttled/LastNode/last_node.tscn")
@@ -46,7 +48,7 @@ func _main_iteration_start() -> void:
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_msec()
 	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
-	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, Global.INT32_MAX)
+	var used_physics_ticks := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
 	if Global._is_logging: print("    used_physics_ticks: %s" % [used_physics_ticks])
 
 	# Run callables
@@ -58,7 +60,7 @@ func _run_callables(used_physics_msec : float) -> void:
 		push_error("Please run GodotCallThrottled.start before calling")
 		return
 
-	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, Global.INT32_MAX)
+	var frame_budget_remaining_msec := clampi(_frame_budget_msec - used_physics_msec, 0, INT32_MAX)
 	var frame_budget_used_msec := 0
 	var is_working := true
 	var call_count := 0
