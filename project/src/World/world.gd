@@ -11,7 +11,7 @@ const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 func _ready() -> void:
 	var frame_budget_msec := roundi(1000 / Engine.get_physics_ticks_per_second())
 	var frame_budget_threshold_msec := 5
-	Throttler.start(frame_budget_msec, frame_budget_threshold_msec)
+	GodotCallThrottled.start(frame_budget_msec, frame_budget_threshold_msec)
 
 func _process(_delta : float) -> void:
 	if Global._is_logging: print("    world _process: %s" % [Time.get_ticks_msec()])
@@ -83,7 +83,7 @@ func _on_button_spawn_balls_deferred_pressed() -> void:
 		cb_defer.call_deferred()
 
 	for n in 500:
-		Throttler.call_throttled(cb_throt)
+		GodotCallThrottled.call_throttled(cb_throt)
 
 	#print("        button end: %s, frame: %s" % [Time.get_ticks_msec(), self.get_tree().get_frame()])
 
@@ -102,7 +102,7 @@ func _on_button_spawn_balls_throttled_pressed() -> void:
 		)
 
 	for n in 500:
-		Throttler.call_throttled(cb)
+		GodotCallThrottled.call_throttled(cb)
 
 
 

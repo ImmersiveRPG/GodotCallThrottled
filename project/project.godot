@@ -19,7 +19,6 @@ config/icon="res://icon.svg"
 [autoload]
 
 Globals="*res://src/Singletons/Globals.gd"
-Throttler="*res://src/Singletons/Throttler.gd"
 GodotCallThrottled="*res://addons/godot_call_throttled/Singletons/GodotCallThrottled.gd"
 
 [editor_plugins]

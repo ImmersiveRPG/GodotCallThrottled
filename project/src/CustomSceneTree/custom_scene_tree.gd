@@ -23,7 +23,7 @@ func _physics_process(_delta : float) -> bool:
 		_gct = self.root.get_node_or_null("GodotCallThrottled")
 
 	if _gct:
-		_gct.loop()
+		_gct._loop()
 
 	return false
 
