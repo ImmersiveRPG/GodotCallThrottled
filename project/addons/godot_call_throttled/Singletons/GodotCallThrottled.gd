@@ -57,10 +57,6 @@ func _main_iteration_done() -> void:
 		self._run_callables(already_used_msec)
 
 func _run_callables(already_used_msec : float) -> void:
-	if not _is_setup:
-		push_error("Please run GodotCallThrottled.start before calling")
-		return
-
 	var frame_budget_remaining_msec := clampi(_frame_budget_msec - already_used_msec, 0, INT32_MAX)
 	var frame_budget_used_msec := 0
 	var is_working := true
@@ -105,6 +101,10 @@ func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_is_setup = true
 
 func call_throttled(cb : Callable, args := []) -> void:
+	if not _is_setup:
+		push_error("Please run GodotCallThrottled.start before calling")
+		return
+
 	var entry := {
 		"callable" : cb,
 		"args" : args,
