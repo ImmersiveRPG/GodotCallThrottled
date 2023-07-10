@@ -7,6 +7,8 @@ extends Node
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
 
+signal waiting_count_change
+
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
 var _last_node_scene := preload("res://addons/godot_call_throttled/LastNode/last_node.tscn")
@@ -62,6 +64,7 @@ func _run_callables(already_used_msec : float) -> void:
 	var is_working := true
 	var call_count := 0
 	var has_reasonable_starting_budget : = frame_budget_remaining_msec - _frame_budget_threshold_msec > 0
+
 	while has_reasonable_starting_budget and is_working:
 		var before := Time.get_ticks_msec()
 
@@ -91,8 +94,14 @@ func _run_callables(already_used_msec : float) -> void:
 		if not did_call or frame_budget_remaining_msec < _frame_budget_threshold_msec:
 			is_working = false
 
+	_mutex.lock()
+	var waiting = _to_call.size()
+	_mutex.unlock()
+
 	if call_count > 0:
-		print("budget:%s, already_used:%s, throttle_used:%s, remaining:%s, calls:%s" % [_frame_budget_msec, already_used_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count])
+		print("budget:%s, already_used:%s, throttle_used:%s, remaining:%s, calls:%s, waiting:%s" % [_frame_budget_msec, already_used_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count, waiting])
+
+	self.emit_signal("waiting_count_change", waiting)
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec
