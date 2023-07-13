@@ -51,19 +51,19 @@ func _main_iteration_start() -> void:
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_msec()
 	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
-	var already_used_msec := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
-	if Global._is_logging: print("    already_used_msec: %s" % [already_used_msec])
+	var overhead_msec := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
+	if Global._is_logging: print("    overhead_msec: %s" % [overhead_msec])
 
 	# Run callables
 	if _is_setup:
-		self._run_callables(already_used_msec)
+		self._run_callables(overhead_msec)
 
-func _run_callables(already_used_msec : float) -> void:
-	var frame_budget_remaining_msec := clampi(_frame_budget_msec - already_used_msec, 0, INT32_MAX)
-	var frame_budget_used_msec := 0
+func _run_callables(overhead_msec : float) -> void:
+	var frame_budget_surplus_msec := clampi(_frame_budget_msec - overhead_msec, 0, INT32_MAX)
+	var frame_budget_expenditure_msec := 0
 	var is_working := true
 	var call_count := 0
-	var has_reasonable_starting_budget : = frame_budget_remaining_msec - _frame_budget_threshold_msec > 0
+	var has_reasonable_starting_budget : = frame_budget_surplus_msec - _frame_budget_threshold_msec > 0
 
 	while has_reasonable_starting_budget and is_working:
 		var before := Time.get_ticks_msec()
@@ -87,21 +87,21 @@ func _run_callables(already_used_msec : float) -> void:
 
 		var after := Time.get_ticks_msec()
 		var used := after - before
-		frame_budget_remaining_msec -= used
-		frame_budget_used_msec += used
+		frame_budget_surplus_msec -= used
+		frame_budget_expenditure_msec += used
 
 		# Stop running callables if there are none left, or we are over budget
-		if not did_call or frame_budget_remaining_msec < _frame_budget_threshold_msec:
+		if not did_call or frame_budget_surplus_msec < _frame_budget_threshold_msec:
 			is_working = false
 
 	_mutex.lock()
-	var waiting = _to_call.size()
+	var waiting_count := _to_call.size()
 	_mutex.unlock()
 
 	if call_count > 0:
-		print("budget:%s, already_used:%s, throttle_used:%s, remaining:%s, calls:%s, waiting:%s" % [_frame_budget_msec, already_used_msec, frame_budget_used_msec, frame_budget_remaining_msec, call_count, waiting])
+		print("budget_msec:%s, overhead_msec:%s, expenditure_msec:%s, surplus_msec:%s, called:%s, waiting:%s" % [_frame_budget_msec, overhead_msec, frame_budget_expenditure_msec, frame_budget_surplus_msec, call_count, waiting_count])
 
-	self.emit_signal("waiting_count_change", waiting)
+	self.emit_signal("waiting_count_change", waiting_count)
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec

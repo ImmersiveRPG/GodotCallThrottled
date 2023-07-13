@@ -15,9 +15,9 @@ func _ready() -> void:
 	GodotCallThrottled.start(frame_budget_msec, frame_budget_threshold_msec)
 	GodotCallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
 
-func _on_waiting_count_change(count : int) -> void:
+func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
-	label.text = "Waiting calls: %s" % [count]
+	label.text = "Waiting calls: %s" % [waiting_count]
 
 func _process(_delta : float) -> void:
 	if Global._is_logging: print("    world _process: %s" % [Time.get_ticks_msec()])
