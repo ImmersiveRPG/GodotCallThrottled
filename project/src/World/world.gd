@@ -13,11 +13,31 @@ func _ready() -> void:
 	var frame_budget_msec := floori(1000 / float(Engine.get_physics_ticks_per_second()))
 	var frame_budget_threshold_msec := 5
 	GodotCallThrottled.start(frame_budget_msec, frame_budget_threshold_msec)
+	GodotCallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
 	GodotCallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
+	GodotCallThrottled.connect("too_busy_to_work", Callable(self, "_on_too_busy_to_work"))
+	GodotCallThrottled.connect("not_too_busy_to_work", Callable(self, "_on_not_too_busy_to_work"))
+
+func _on_too_busy_to_work(waiting_count : int) -> void:
+	print("--- Called _on_too_busy_to_work waiting_count: %s" % [waiting_count])
+	$LabelBusy.show()
+
+func _on_not_too_busy_to_work(waiting_count : int) -> void:
+	print("+++ Called _on_not_too_busy_to_work waiting_count: %s" % [waiting_count])
+	$LabelBusy.hide()
 
 func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
 	label.text = "Waiting calls: %s" % [waiting_count]
+
+func _on_over_frame_budget(used_msec : int, budget_msec : int) -> void:
+	print("Called _on_over_frame_budget used_msec: %s, budget_msec: %s" % [used_msec, budget_msec])
+	var i := 0
+	for child in _ball_holder.get_children():
+		child.queue_free()
+		i += 1
+		if i > 10:
+			return
 
 func _process(_delta : float) -> void:
 	if Global._is_logging: print("    world _process: %s" % [Time.get_ticks_msec()])

@@ -96,6 +96,14 @@ offset_right = 1083.0
 offset_bottom = 83.0
 text = "Waiting calls: 0"
 
+[node name="LabelBusy" type="Label" parent="."]
+visible = false
+offset_left = 939.0
+offset_top = 85.0
+offset_right = 1083.0
+offset_bottom = 133.0
+text = "Busy!"
+
 [connection signal="pressed" from="ButtonRemoveAllBalls" to="." method="_on_button_remove_all_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsBlocking" to="." method="_on_button_spawn_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsThrottled" to="." method="_on_button_spawn_balls_throttled_pressed"]

@@ -7,7 +7,10 @@ extends Node
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
 
-signal waiting_count_change
+signal waiting_count_change(waiting_count : int)
+signal over_frame_budget(used_msec : int, budget_msec : int)
+signal too_busy_to_work(waiting_count : int)
+signal not_too_busy_to_work(waiting_count : int)
 
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
@@ -48,6 +51,7 @@ func _main_iteration_start() -> void:
 	_main_iteration_end_ticks = _main_iteration_start_ticks
 	if Global._is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
+
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_msec()
 	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
@@ -58,6 +62,8 @@ func _main_iteration_done() -> void:
 	if _is_setup:
 		self._run_callables(overhead_msec)
 
+var _was_working := false
+
 func _run_callables(overhead_msec : float) -> void:
 	var frame_budget_surplus_msec := clampi(_frame_budget_msec - overhead_msec, 0, INT32_MAX)
 	var frame_budget_expenditure_msec := 0
@@ -65,6 +71,7 @@ func _run_callables(overhead_msec : float) -> void:
 	var call_count := 0
 	var has_reasonable_starting_budget : = frame_budget_surplus_msec - _frame_budget_threshold_msec > 0
 
+	var did_work := false
 	while has_reasonable_starting_budget and is_working:
 		var before := Time.get_ticks_msec()
 
@@ -82,6 +89,7 @@ func _run_callables(overhead_msec : float) -> void:
 					callable.callv(args)
 				else:
 					callable.call()
+				did_work = true
 				did_call = true
 				call_count += 1
 
@@ -102,6 +110,18 @@ func _run_callables(overhead_msec : float) -> void:
 		print("budget_msec:%s, overhead_msec:%s, expenditure_msec:%s, surplus_msec:%s, called:%s, waiting:%s" % [_frame_budget_msec, overhead_msec, frame_budget_expenditure_msec, frame_budget_surplus_msec, call_count, waiting_count])
 
 	self.emit_signal("waiting_count_change", waiting_count)
+
+	if not _was_working and did_work:
+		self.emit_signal("not_too_busy_to_work", waiting_count)
+
+	if _was_working and not did_work and waiting_count > 0:
+		self.emit_signal("too_busy_to_work", waiting_count)
+
+	var used_msec := clampi(Time.get_ticks_msec() - _main_iteration_start_ticks, 0, INT32_MAX)
+	if used_msec > _frame_budget_msec:
+		self.emit_signal("over_frame_budget", used_msec, _frame_budget_msec)
+
+	_was_working = did_work
 
 func start(frame_budget_msec : int, frame_budget_threshold_msec : int) -> void:
 	_frame_budget_msec = frame_budget_msec
