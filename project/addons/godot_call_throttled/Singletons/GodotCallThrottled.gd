@@ -3,7 +3,6 @@
 # https://github.com/ImmersiveRPG/GodotCallThrottled
 
 extends Node
-#class_name GodotCallThrottled
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
 
@@ -69,7 +68,7 @@ func _run_callables(overhead_msec : float) -> void:
 	var frame_budget_expenditure_msec := 0
 	var is_working := true
 	var call_count := 0
-	var has_reasonable_starting_budget : = frame_budget_surplus_msec - _frame_budget_threshold_msec > 0
+	var has_reasonable_starting_budget := frame_budget_surplus_msec - _frame_budget_threshold_msec > 0
 
 	var did_work := false
 	while has_reasonable_starting_budget and is_working:
