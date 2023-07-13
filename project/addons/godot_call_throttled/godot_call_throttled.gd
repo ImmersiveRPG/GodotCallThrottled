@@ -17,7 +17,7 @@ func _enter_tree() -> void:
 		if not ProjectSettings.has_setting("autoload/%s" % [entry.name]):
 			self.add_autoload_singleton(entry.name, entry.path)
 
-	print("Installed plugin Godot Call Throttled")
+	print("Installed plugin GodotCallThrottled")
 
 func _exit_tree() -> void:
 	# Uninstall all the autoloads
@@ -28,4 +28,4 @@ func _exit_tree() -> void:
 		if ProjectSettings.has_setting("autoload/%s" % [entry.name]):
 			self.remove_autoload_singleton(entry.name)
 
-	print("Uninstalled plugin Godot Call Throttled")
+	print("Uninstalled plugin GodotCallThrottled")
