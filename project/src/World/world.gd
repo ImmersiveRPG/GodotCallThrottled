@@ -10,6 +10,9 @@ const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 var _is_artificial_delay := false
 
 func _ready() -> void:
+	# Wait 1 second for the game engine to start
+	await self.get_tree().create_timer(1).timeout
+
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
 	var frame_budget_threshold_usec := 5000
 	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
@@ -36,7 +39,7 @@ func _on_over_frame_budget(used_usec : int, budget_usec : int) -> void:
 	for child in _ball_holder.get_children():
 		child.queue_free()
 		i += 1
-		if i > 10:
+		if i > 100:
 			return
 
 func _process(_delta : float) -> void:
