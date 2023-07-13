@@ -19,12 +19,13 @@ var _last_node = null
 var _to_call := []
 var _mutex := Mutex.new()
 
+const _is_logging := false
 var _frame_budget_usec := 0
 var _frame_budget_threshold_usec := 0
 var _is_setup := false
 
 func _on_start_physics_frame() -> void:
-	if Global._is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
+	#if _is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
 	self._main_iteration_start()
 
 	# Just return if there isn't a scene yet
@@ -42,20 +43,19 @@ func _on_start_physics_frame() -> void:
 
 	# Move last node to be last in tree
 	if _last_node and _last_node.get_index() != target.get_child_count()-1:
-		print("Moved last node to end")
 		target.move_child(_last_node, target.get_child_count()-1)
 
 func _main_iteration_start() -> void:
 	_main_iteration_start_ticks = Time.get_ticks_usec()
 	_main_iteration_end_ticks = _main_iteration_start_ticks
-	if Global._is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
+	#if _is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
 
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_usec()
-	if Global._is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
+	#if _is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
 	var overhead_usec := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
-	if Global._is_logging: print("    overhead_usec: %s" % [overhead_usec])
+	#if _is_logging: print("    overhead_usec: %s" % [overhead_usec])
 
 	# Run callables
 	if _is_setup:
@@ -105,7 +105,7 @@ func _run_callables(overhead_usec : float) -> void:
 	var waiting_count := _to_call.size()
 	_mutex.unlock()
 
-	if call_count > 0:
+	if _is_logging and call_count > 0:
 		print("budget_usec:%s, overhead_usec:%s, expenditure_usec:%s, surplus_usec:%s, called:%s, waiting:%s" % [_frame_budget_usec, overhead_usec, frame_budget_expenditure_usec, frame_budget_surplus_usec, call_count, waiting_count])
 
 	self.emit_signal("waiting_count_change", waiting_count)

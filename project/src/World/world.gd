@@ -11,7 +11,6 @@ var _is_artificial_delay := false
 
 func _ready() -> void:
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
-
 	var frame_budget_threshold_usec := 5000
 	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
 	GodotCallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
@@ -41,10 +40,9 @@ func _on_over_frame_budget(used_usec : int, budget_usec : int) -> void:
 			return
 
 func _process(_delta : float) -> void:
-	if Global._is_logging: print("    world _process: %s" % [Time.get_ticks_usec()])
+	pass
 
 func _physics_process(_delta : float) -> void:
-	if Global._is_logging: print("    world _physics_process: %s" % [Time.get_ticks_usec()])
 	if _is_artificial_delay: OS.delay_usec(7000)
 
 func _on_fps_timer_timeout() -> void:
