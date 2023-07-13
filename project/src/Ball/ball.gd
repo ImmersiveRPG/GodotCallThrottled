@@ -12,6 +12,6 @@ func _process(_delta : float) -> void:
 	pass
 
 func _physics_process(_delta : float) -> void:
-	#print("    ball _physics_process: %s" % [Time.get_ticks_msec()])
-	#OS.delay_msec(5)
+	#print("    ball _physics_process: %s" % [Time.get_ticks_usec()])
+	#OS.delay_usec(5000)
 	pass
