@@ -17,20 +17,20 @@ func _ready() -> void:
 	var frame_budget_threshold_usec := 5000
 	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
 	GodotCallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
-	GodotCallThrottled.connect("not_too_busy_to_work", Callable(self, "_on_not_too_busy_to_work"))
-	GodotCallThrottled.connect("too_busy_to_work", Callable(self, "_on_too_busy_to_work"))
+	GodotCallThrottled.connect("engine_not_busy", Callable(self, "_on_engine_not_busy"))
+	GodotCallThrottled.connect("engine_too_busy", Callable(self, "_on_engine_too_busy"))
 	GodotCallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
 
 func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
 	label.text = "Waiting calls: %s" % [waiting_count]
 
-func _on_not_too_busy_to_work(waiting_count : int) -> void:
-	#print("+++ Called _on_not_too_busy_to_work waiting_count: %s" % [waiting_count])
+func _on_engine_not_busy(waiting_count : int) -> void:
+	#print("+++ Called _on_engine_not_busy waiting_count: %s" % [waiting_count])
 	$LabelBusy.hide()
 
-func _on_too_busy_to_work(waiting_count : int) -> void:
-	print("--- Called _on_too_busy_to_work waiting_count: %s" % [waiting_count])
+func _on_engine_too_busy(waiting_count : int) -> void:
+	print("--- Called _on_engine_too_busy waiting_count: %s" % [waiting_count])
 	$LabelBusy.show()
 
 	# We are continuously over frame budget, so free all the balls

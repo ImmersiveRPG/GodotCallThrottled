@@ -2,6 +2,7 @@
 
 ```GDScript
 func _ready() -> void:
+	# FIXME: Update this to have callbacks
 	var frame_budget_msec := roundi(1000 / Engine.get_physics_ticks_per_second())
 	var frame_budget_threshold_msec := 5
 	GodotCallThrottled.start(frame_budget_msec, frame_budget_threshold_msec)

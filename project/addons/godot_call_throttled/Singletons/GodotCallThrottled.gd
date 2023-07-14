@@ -8,8 +8,8 @@ const INT32_MAX := int(int(pow(2, 31)) - 1)
 
 signal waiting_count_change(waiting_count : int)
 signal over_frame_budget(used_usec : int, budget_usec : int)
-signal too_busy_to_work(waiting_count : int)
-signal not_too_busy_to_work(waiting_count : int)
+signal engine_too_busy(waiting_count : int)
+signal engine_not_busy(waiting_count : int)
 
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
@@ -111,11 +111,11 @@ func _run_callables(overhead_usec : float) -> void:
 
 	if _is_too_busy_to_work and not _was_working and did_work:
 		_is_too_busy_to_work = false
-		self.emit_signal("not_too_busy_to_work", waiting_count)
+		self.emit_signal("engine_not_busy", waiting_count)
 
 	if not _is_too_busy_to_work and _was_working and not did_work and waiting_count > 0:
 		_is_too_busy_to_work = true
-		self.emit_signal("too_busy_to_work", waiting_count)
+		self.emit_signal("engine_too_busy", waiting_count)
 
 	var used_usec := clampi(Time.get_ticks_usec() - _main_iteration_start_ticks, 0, INT32_MAX)
 	if used_usec > _frame_budget_usec:
