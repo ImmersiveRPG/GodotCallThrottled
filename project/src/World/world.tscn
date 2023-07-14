@@ -36,31 +36,31 @@ far = 10000.0
 transform = Transform3D(-2.18557e-08, -0.866025, 0.5, -3.78552e-08, 0.5, 0.866025, -1, 1.77636e-15, -4.37114e-08, 0, 10, 0)
 
 [node name="ButtonRemoveAllBalls" type="Button" parent="."]
-offset_left = 34.0
-offset_top = 31.0
-offset_right = 177.0
-offset_bottom = 79.0
+offset_left = 21.0
+offset_top = 29.0
+offset_right = 164.0
+offset_bottom = 77.0
 text = "Remove All Balls"
 
 [node name="ButtonSpawnBallsBlocking" type="Button" parent="."]
-offset_left = 222.0
-offset_top = 29.0
-offset_right = 403.0
-offset_bottom = 78.0
+offset_left = 175.0
+offset_top = 32.0
+offset_right = 356.0
+offset_bottom = 81.0
 text = "Spawn Balls Normal"
 
 [node name="ButtonSpawnBallsThrottled" type="Button" parent="."]
-offset_left = 690.0
-offset_top = 31.0
-offset_right = 897.0
-offset_bottom = 80.0
+offset_left = 581.0
+offset_top = 34.0
+offset_right = 788.0
+offset_bottom = 83.0
 text = "Spawn Balls Throttled"
 
 [node name="ButtonSpawnBallsDeferred" type="Button" parent="."]
-offset_left = 446.0
-offset_top = 28.0
-offset_right = 653.0
-offset_bottom = 77.0
+offset_left = 366.0
+offset_top = 32.0
+offset_right = 573.0
+offset_bottom = 81.0
 text = "Spawn Balls Deferred"
 
 [node name="CheckBoxArtificialDelay" type="CheckBox" parent="."]
@@ -90,28 +90,32 @@ autostart = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
 [node name="LabelFPS" type="Label" parent="."]
-offset_left = 919.0
-offset_top = 24.0
-offset_right = 1083.0
-offset_bottom = 84.0
+offset_left = 828.0
+offset_top = 46.0
+offset_right = 992.0
+offset_bottom = 106.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 41
 text = "FPS: ?"
 
 [node name="LabelWaitingCount" type="Label" parent="."]
-offset_left = 939.0
-offset_top = 87.0
-offset_right = 1083.0
-offset_bottom = 135.0
+offset_left = 759.0
+offset_top = 102.0
+offset_right = 1145.0
+offset_bottom = 162.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 41
 text = "Waiting calls: 0"
 
 [node name="LabelBusy" type="Label" parent="."]
 visible = false
-offset_left = 939.0
-offset_top = 141.0
-offset_right = 1083.0
-offset_bottom = 189.0
-text = "Busy!"
+offset_left = 765.0
+offset_top = 167.0
+offset_right = 1139.0
+offset_bottom = 239.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 41
+text = "Too Busy!"
 
 [connection signal="pressed" from="ButtonRemoveAllBalls" to="." method="_on_button_remove_all_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsBlocking" to="." method="_on_button_spawn_balls_pressed"]
