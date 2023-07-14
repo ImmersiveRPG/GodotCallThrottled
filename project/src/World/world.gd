@@ -33,8 +33,14 @@ func _on_too_busy_to_work(waiting_count : int) -> void:
 	print("--- Called _on_too_busy_to_work waiting_count: %s" % [waiting_count])
 	$LabelBusy.show()
 
+	# We are continuously over frame budget, so free all the balls
+	for child in _ball_holder.get_children():
+		child.queue_free()
+
 func _on_over_frame_budget(used_usec : int, budget_usec : int) -> void:
 	print("Called _on_over_frame_budget used_usec: %s, budget_usec: %s" % [used_usec, budget_usec])
+
+	# The current frame went over budget, so free 100 balls
 	var i := 0
 	for child in _ball_holder.get_children():
 		child.queue_free()
