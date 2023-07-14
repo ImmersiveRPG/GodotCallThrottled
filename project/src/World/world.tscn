@@ -107,12 +107,20 @@ theme_override_colors/font_color = Color(1, 1, 0, 1)
 theme_override_font_sizes/font_size = 41
 text = "Waiting calls: 0"
 
+[node name="LabelBalls" type="Label" parent="."]
+offset_left = 761.0
+offset_top = 168.0
+offset_right = 1147.0
+offset_bottom = 228.0
+theme_override_colors/font_color = Color(1, 1, 0, 1)
+theme_override_font_sizes/font_size = 41
+text = "Balls: 0"
+
 [node name="LabelBusy" type="Label" parent="."]
-visible = false
-offset_left = 765.0
-offset_top = 167.0
-offset_right = 1139.0
-offset_bottom = 239.0
+offset_left = 767.0
+offset_top = 232.0
+offset_right = 1141.0
+offset_bottom = 304.0
 theme_override_colors/font_color = Color(1, 0, 0, 1)
 theme_override_font_sizes/font_size = 41
 text = "Too Busy!"

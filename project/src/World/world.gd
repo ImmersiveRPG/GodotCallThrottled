@@ -57,9 +57,10 @@ func _physics_process(_delta : float) -> void:
 func _on_fps_timer_timeout() -> void:
 	var fps := Engine.get_frames_per_second()
 	var count := _ball_holder.get_child_count()
-	var title := "Balls: %s" % [count]
-	self.get_window().set_title(title)
+	#var title := "Balls: %s" % [count]
+	#self.get_window().set_title(title)
 	$LabelFPS.text = "FPS: %s" % [fps]
+	$LabelBalls.text = "Balls: %s" % [count]
 
 func _on_button_spawn_balls_pressed() -> void:
 	var before := Time.get_ticks_usec()
