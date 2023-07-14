@@ -5,12 +5,12 @@ func _ready() -> void:
 	# Wait 1 second for the game engine to settle down
 	await self.get_tree().create_timer(1).timeout
 
-	# Setup GodotCallThrottled and callbacks
+	# Setup frame budget and threshold
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
 	var frame_budget_threshold_usec := 5000
-
-	# Setup GodotCallThrottled and callbacks
 	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
+
+	# Setup callbacks
 	GodotCallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
 	GodotCallThrottled.connect("engine_not_busy", Callable(self, "_on_engine_not_busy"))
 	GodotCallThrottled.connect("engine_too_busy", Callable(self, "_on_engine_too_busy"))
