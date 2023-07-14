@@ -48,7 +48,7 @@ func _on_start_physics_frame() -> void:
 		target.move_child(_last_node, target.get_child_count()-1)
 
 func _main_iteration_start() -> void:
-	_main_iteration_start_ticks = Time.get_ticks_usec()
+	_main_iteration_start_ticks = Time.get_ticks_usec() # FIXME: Change to Engine.get_frame_ticks()
 	_main_iteration_end_ticks = _main_iteration_start_ticks
 	#if _is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
