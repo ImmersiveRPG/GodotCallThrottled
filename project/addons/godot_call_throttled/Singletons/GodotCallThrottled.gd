@@ -23,6 +23,8 @@ const _is_logging := false
 var _frame_budget_usec := 0
 var _frame_budget_threshold_usec := 0
 var _is_setup := false
+var _was_working := false
+var _is_too_busy_to_work := false
 
 func _on_start_physics_frame() -> void:
 	#if _is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
@@ -50,7 +52,6 @@ func _main_iteration_start() -> void:
 	_main_iteration_end_ticks = _main_iteration_start_ticks
 	#if _is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
-
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_usec()
 	#if _is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
@@ -60,8 +61,6 @@ func _main_iteration_done() -> void:
 	# Run callables
 	if _is_setup:
 		self._run_callables(overhead_usec)
-
-var _was_working := false
 
 func _run_callables(overhead_usec : float) -> void:
 	var frame_budget_surplus_usec := clampi(_frame_budget_usec - overhead_usec, 0, INT32_MAX)
@@ -110,10 +109,12 @@ func _run_callables(overhead_usec : float) -> void:
 
 	self.emit_signal("waiting_count_change", waiting_count)
 
-	if not _was_working and did_work:
+	if _is_too_busy_to_work and not _was_working and did_work:
+		_is_too_busy_to_work = false
 		self.emit_signal("not_too_busy_to_work", waiting_count)
 
-	if _was_working and not did_work and waiting_count > 0:
+	if not _is_too_busy_to_work and _was_working and not did_work and waiting_count > 0:
+		_is_too_busy_to_work = true
 		self.emit_signal("too_busy_to_work", waiting_count)
 
 	var used_usec := clampi(Time.get_ticks_usec() - _main_iteration_start_ticks, 0, INT32_MAX)

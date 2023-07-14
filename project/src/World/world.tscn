@@ -89,19 +89,28 @@ autostart = true
 [node name="Ball" parent="BallHolder" instance=ExtResource("2_538xr")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 0)
 
+[node name="LabelFPS" type="Label" parent="."]
+offset_left = 919.0
+offset_top = 24.0
+offset_right = 1083.0
+offset_bottom = 84.0
+theme_override_colors/font_color = Color(1, 0, 0, 1)
+theme_override_font_sizes/font_size = 41
+text = "FPS: ?"
+
 [node name="LabelWaitingCount" type="Label" parent="."]
 offset_left = 939.0
-offset_top = 35.0
+offset_top = 87.0
 offset_right = 1083.0
-offset_bottom = 83.0
+offset_bottom = 135.0
 text = "Waiting calls: 0"
 
 [node name="LabelBusy" type="Label" parent="."]
 visible = false
 offset_left = 939.0
-offset_top = 85.0
+offset_top = 141.0
 offset_right = 1083.0
-offset_bottom = 133.0
+offset_bottom = 189.0
 text = "Busy!"
 
 [connection signal="pressed" from="ButtonRemoveAllBalls" to="." method="_on_button_remove_all_balls_pressed"]

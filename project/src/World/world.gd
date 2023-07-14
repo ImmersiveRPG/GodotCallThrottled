@@ -10,7 +10,7 @@ const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
 var _is_artificial_delay := false
 
 func _ready() -> void:
-	# Wait 1 second for the game engine to start
+	# Wait 1 second for the game engine to settle down
 	await self.get_tree().create_timer(1).timeout
 
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
@@ -51,8 +51,9 @@ func _physics_process(_delta : float) -> void:
 func _on_fps_timer_timeout() -> void:
 	var fps := Engine.get_frames_per_second()
 	var count := _ball_holder.get_child_count()
-	var title := "FPS: %s, Balls: %s" % [fps, count]
+	var title := "Balls: %s" % [count]
 	self.get_window().set_title(title)
+	$LabelFPS.text = "FPS: %s" % [fps]
 
 func _on_button_spawn_balls_pressed() -> void:
 	var before := Time.get_ticks_usec()
