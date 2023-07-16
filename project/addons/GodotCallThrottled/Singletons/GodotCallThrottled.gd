@@ -13,13 +13,13 @@ signal engine_not_busy(waiting_count : int)
 
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
-var _last_node_scene := preload("res://addons/godot_call_throttled/LastNode/last_node.tscn")
+var _last_node_scene := preload("res://addons/GodotCallThrottled/LastNode/last_node.tscn")
 var _last_node = null
 
 var _to_call := []
 var _mutex := Mutex.new()
 
-const _is_logging := false
+const _is_logging := true
 var _frame_budget_usec := 0
 var _frame_budget_threshold_usec := 0
 var _is_setup := false

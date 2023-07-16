@@ -12,13 +12,13 @@ config_version=5
 
 config/name="GodotCallThrottled"
 run/main_scene="res://src/World/world.tscn"
-config/features=PackedStringArray("4.2", "Forward Plus")
+config/features=PackedStringArray("4.1", "Forward Plus")
 config/icon="res://icon.svg"
 
 [autoload]
 
-GodotCallThrottled="*res://addons/godot_call_throttled/Singletons/GodotCallThrottled.gd"
+GodotCallThrottled="*res://addons/GodotCallThrottled/Singletons/GodotCallThrottled.gd"
 
 [editor_plugins]
 
-enabled=PackedStringArray("res://addons/godot_call_throttled/plugin.cfg")
+enabled=PackedStringArray("res://addons/GodotCallThrottled/plugin.cfg")
