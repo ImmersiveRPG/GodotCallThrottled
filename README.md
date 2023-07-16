@@ -46,5 +46,5 @@ func _on_button_pressed() -> void:
 
 Part 1: https://www.youtube.com/watch?v=WLDM0tQ-XqE
 
-Part 2: https://www.youtube.com/watch?v=WLDM0tQ-XqE
+Part 2: https://www.youtube.com/watch?v=5M8bWNO2d_0
 
