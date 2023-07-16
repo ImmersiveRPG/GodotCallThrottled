@@ -4,7 +4,7 @@
 
 extends Node3D
 
-const _ball_scene : PackedScene = preload("res://src/Ball/ball.tscn")
+const _ball_scene : PackedScene = preload("res://example/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
 var _is_artificial_delay := false

@@ -1,7 +1,7 @@
 [gd_scene load_steps=9 format=3 uid="uid://445senvxy3xb"]
 
-[ext_resource type="Script" path="res://src/World/world.gd" id="1_iii4f"]
-[ext_resource type="PackedScene" uid="uid://dc5ou3l5db153" path="res://src/Ball/ball.tscn" id="2_538xr"]
+[ext_resource type="Script" path="res://example/World/world.gd" id="1_iii4f"]
+[ext_resource type="PackedScene" uid="uid://dc5ou3l5db153" path="res://example/Ball/ball.tscn" id="2_538xr"]
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_7bmdo"]
 
