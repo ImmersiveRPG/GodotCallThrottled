@@ -25,6 +25,7 @@ var _frame_budget_threshold_usec := 0
 var _is_setup := false
 var _was_working := false
 var _is_too_busy_to_work := false
+var _fn_get_frame_start_ticks_usec : Callable
 
 func _on_start_physics_frame() -> void:
 	#if _is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
@@ -48,7 +49,7 @@ func _on_start_physics_frame() -> void:
 		target.move_child(_last_node, target.get_child_count()-1)
 
 func _main_iteration_start() -> void:
-	_main_iteration_start_ticks = Time.get_ticks_usec() # FIXME: Change to Engine.get_frame_ticks()
+	_main_iteration_start_ticks = _fn_get_frame_start_ticks_usec.call()
 	_main_iteration_end_ticks = _main_iteration_start_ticks
 	#if _is_logging: print("    _main_iteration_start: %s" % [_main_iteration_start_ticks])
 
@@ -124,6 +125,13 @@ func _run_callables(overhead_usec : float) -> void:
 	_was_working = did_work
 
 func start(frame_budget_usec : int, frame_budget_threshold_usec : int) -> void:
+	# Get the best method of getting frame start time
+	if Engine.has_method("get_frame_ticks"):
+		_fn_get_frame_start_ticks_usec = Callable(Engine, "get_frame_ticks")
+	else:
+		_fn_get_frame_start_ticks_usec = Callable(Time, "get_ticks_usec")
+	print("Using '%s' to get frame start time" % _fn_get_frame_start_ticks_usec)
+
 	_frame_budget_usec = frame_budget_usec
 	_frame_budget_threshold_usec = frame_budget_threshold_usec
 	self.get_tree().connect("physics_frame", Callable(self, "_on_start_physics_frame"))
