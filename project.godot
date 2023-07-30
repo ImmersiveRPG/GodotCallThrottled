@@ -17,7 +17,7 @@ config/icon="res://icon.png"
 
 [autoload]
 
-GodotCallThrottled="*res://addons/GodotCallThrottled/Singletons/GodotCallThrottled.gd"
+CallThrottled="*res://addons/GodotCallThrottled/Singletons/CallThrottled.gd"
 
 [editor_plugins]
 

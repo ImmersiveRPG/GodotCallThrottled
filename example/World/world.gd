@@ -16,11 +16,11 @@ func _ready() -> void:
 	# Setup GodotCallThrottled and callbacks
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
 	var frame_budget_threshold_usec := 5000
-	GodotCallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
-	GodotCallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
-	GodotCallThrottled.connect("engine_not_busy", Callable(self, "_on_engine_not_busy"))
-	GodotCallThrottled.connect("engine_too_busy", Callable(self, "_on_engine_too_busy"))
-	GodotCallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
+	CallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
+	CallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
+	CallThrottled.connect("engine_not_busy", Callable(self, "_on_engine_not_busy"))
+	CallThrottled.connect("engine_too_busy", Callable(self, "_on_engine_too_busy"))
+	CallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
 
 func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
@@ -119,7 +119,7 @@ func _on_button_spawn_balls_throttled_pressed() -> void:
 		)
 
 	for n in 500:
-		GodotCallThrottled.call_throttled(cb)
+		CallThrottled.call_throttled(cb)
 
 
 

@@ -7,5 +7,5 @@ extends Node
 
 
 func _process(_delta : float) -> void:
-	GodotCallThrottled._main_iteration_done()
+	CallThrottled._main_iteration_done()
 	

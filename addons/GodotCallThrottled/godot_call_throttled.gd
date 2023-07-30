@@ -7,7 +7,7 @@ extends EditorPlugin
 
 # Get the name and paths of all the autoloads
 const autoloads := [
-	{"name": "GodotCallThrottled", "path": "res://addons/GodotCallThrottled/Singletons/GodotCallThrottled.gd"},
+	{"name": "CallThrottled", "path": "res://addons/GodotCallThrottled/Singletons/CallThrottled.gd"},
 ]
 
 func _enter_tree() -> void:

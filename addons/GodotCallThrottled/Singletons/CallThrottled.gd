@@ -139,7 +139,7 @@ func start(frame_budget_usec : int, frame_budget_threshold_usec : int) -> void:
 
 func call_throttled(cb : Callable, args := []) -> void:
 	if not _is_setup:
-		push_error("Please run GodotCallThrottled.start before calling")
+		push_error("Please run CallThrottled.start before calling")
 		return
 
 	var entry := {
