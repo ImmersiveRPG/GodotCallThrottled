@@ -14,9 +14,9 @@ signal engine_not_busy(waiting_count : int)
 var _main_iteration_start_ticks := 0
 var _main_iteration_end_ticks := 0
 var _last_node_scene := preload("res://addons/GodotCallThrottled/LastNode/last_node.tscn")
-var _last_node = null
+var _last_node : Node = null
 
-var _to_call := []
+var _to_call : Array[Dictionary] = []
 var _mutex := Mutex.new()
 
 const _is_logging := true
@@ -32,7 +32,7 @@ func _on_start_physics_frame() -> void:
 	self._main_iteration_start()
 
 	# Just return if there isn't a scene yet
-	var target = self.get_tree().root
+	var target := self.get_tree().root
 	if not target: return
 
 	# Forget last node if it has been freed
@@ -76,7 +76,7 @@ func _run_callables(overhead_usec : float) -> void:
 
 		# Get the next callable
 		_mutex.lock()
-		var entry = _to_call.pop_front()
+		var entry := _to_call.pop_front()
 		_mutex.unlock()
 
 		var did_call := false
