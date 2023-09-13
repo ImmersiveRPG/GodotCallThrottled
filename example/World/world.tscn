@@ -83,6 +83,7 @@ offset_left = 57.0
 offset_top = 184.0
 offset_right = 497.0
 offset_bottom = 215.0
+button_pressed = true
 text = "Remove all balls when engine is too busy to do anything"
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]

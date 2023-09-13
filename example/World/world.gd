@@ -7,9 +7,9 @@ extends Node3D
 const _ball_scene : PackedScene = preload("res://example/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
-var _is_artificial_delay := false
-var _is_remove_balls_when_over_frame_budget := true
-var _is_remove_all_balls := false
+@onready var _is_artificial_delay : bool = $CheckBoxArtificialDelay.button_pressed
+@onready var _is_remove_balls_when_over_frame_budget : bool = $CheckBoxRemove100.button_pressed
+@onready var _is_remove_all_balls : bool = $CheckBoxRemoveAll.button_pressed
 
 func _ready() -> void:
 	# Wait 1 second for the game engine to settle down
