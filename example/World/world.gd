@@ -8,6 +8,8 @@ const _ball_scene : PackedScene = preload("res://example/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
 var _is_artificial_delay := false
+var _is_remove_balls_when_over_frame_budget := true
+var _is_remove_all_balls := false
 
 func _ready() -> void:
 	# Wait 1 second for the game engine to settle down
@@ -35,10 +37,13 @@ func _on_engine_too_busy(waiting_count : int) -> void:
 	$LabelBusy.show()
 
 	# We are continuously over frame budget, so free all the balls
-	for child in _ball_holder.get_children():
-		child.queue_free()
+	if _is_remove_all_balls:
+		for child in _ball_holder.get_children():
+			child.queue_free()
 
 func _on_over_frame_budget(used_usec : int, budget_usec : int) -> void:
+	if not _is_remove_balls_when_over_frame_budget: return
+
 	print("Called _on_over_frame_budget used_usec: %s, budget_usec: %s" % [used_usec, budget_usec])
 
 	# The current frame went over budget, so free 100 balls
@@ -130,3 +135,11 @@ func _on_button_remove_all_balls_pressed() -> void:
 
 func _on_check_box_artificial_delay_pressed() -> void:
 	_is_artificial_delay = not _is_artificial_delay
+
+func _on_check_box_remove_100_pressed() -> void:
+	_is_remove_balls_when_over_frame_budget = not _is_remove_balls_when_over_frame_budget
+
+
+
+func _on_check_box_remove_all_pressed() -> void:
+	_is_remove_all_balls = not _is_remove_all_balls

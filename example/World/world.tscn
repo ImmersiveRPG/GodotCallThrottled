@@ -67,8 +67,23 @@ text = "Spawn Balls Deferred"
 offset_left = 53.0
 offset_top = 119.0
 offset_right = 489.0
-offset_bottom = 185.0
+offset_bottom = 150.0
 text = "Add artificial delay to world _physics_process"
+
+[node name="CheckBoxRemove100" type="CheckBox" parent="."]
+offset_left = 55.0
+offset_top = 150.0
+offset_right = 436.0
+offset_bottom = 181.0
+button_pressed = true
+text = "Remove 100 balls each time we go over frame budget"
+
+[node name="CheckBoxRemoveAll" type="CheckBox" parent="."]
+offset_left = 57.0
+offset_top = 184.0
+offset_right = 497.0
+offset_bottom = 215.0
+text = "Remove all balls when engine is too busy to do anything"
 
 [node name="StaticBody3D" type="StaticBody3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2, 0)
@@ -131,4 +146,6 @@ text = "Too Busy!"
 [connection signal="pressed" from="ButtonSpawnBallsThrottled" to="." method="_on_button_spawn_balls_throttled_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsDeferred" to="." method="_on_button_spawn_balls_deferred_pressed"]
 [connection signal="pressed" from="CheckBoxArtificialDelay" to="." method="_on_check_box_artificial_delay_pressed"]
+[connection signal="pressed" from="CheckBoxRemove100" to="." method="_on_check_box_remove_100_pressed"]
+[connection signal="pressed" from="CheckBoxRemoveAll" to="." method="_on_check_box_remove_all_pressed"]
 [connection signal="timeout" from="FPSTimer" to="." method="_on_fps_timer_timeout"]
