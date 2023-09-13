@@ -63,11 +63,18 @@ offset_right = 573.0
 offset_bottom = 81.0
 text = "Spawn Balls Deferred"
 
+[node name="CheckBoxLog" type="CheckBox" parent="."]
+offset_left = 56.0
+offset_top = 88.0
+offset_right = 492.0
+offset_bottom = 119.0
+text = "Log"
+
 [node name="CheckBoxArtificialDelay" type="CheckBox" parent="."]
-offset_left = 53.0
-offset_top = 119.0
-offset_right = 489.0
-offset_bottom = 150.0
+offset_left = 56.0
+offset_top = 121.0
+offset_right = 492.0
+offset_bottom = 152.0
 text = "Add artificial delay to world _physics_process"
 
 [node name="CheckBoxRemove100" type="CheckBox" parent="."]
@@ -146,6 +153,7 @@ text = "Too Busy!"
 [connection signal="pressed" from="ButtonSpawnBallsBlocking" to="." method="_on_button_spawn_balls_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsThrottled" to="." method="_on_button_spawn_balls_throttled_pressed"]
 [connection signal="pressed" from="ButtonSpawnBallsDeferred" to="." method="_on_button_spawn_balls_deferred_pressed"]
+[connection signal="pressed" from="CheckBoxLog" to="." method="_on_check_box_log_pressed"]
 [connection signal="pressed" from="CheckBoxArtificialDelay" to="." method="_on_check_box_artificial_delay_pressed"]
 [connection signal="pressed" from="CheckBoxRemove100" to="." method="_on_check_box_remove_100_pressed"]
 [connection signal="pressed" from="CheckBoxRemoveAll" to="." method="_on_check_box_remove_all_pressed"]

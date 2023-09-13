@@ -6,6 +6,7 @@ extends Node
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
 
+signal log(frame_budget_usec : int, overhead_usec : int, frame_budget_expenditure_usec : int, frame_budget_surplus_usec : int, call_count : int, waiting_count : int)
 signal waiting_count_change(waiting_count : int)
 signal over_frame_budget(used_usec : int, budget_usec : int)
 signal engine_too_busy(waiting_count : int)
@@ -19,7 +20,7 @@ var _last_node : Node = null
 var _to_call : Array[Dictionary] = []
 var _mutex := Mutex.new()
 
-const _is_logging := true
+const _is_logging := false
 var _frame_budget_usec := 0
 var _frame_budget_threshold_usec := 0
 var _is_setup := false
@@ -105,8 +106,9 @@ func _run_callables(overhead_usec : float) -> void:
 	var waiting_count := _to_call.size()
 	_mutex.unlock()
 
-	if _is_logging and call_count > 0:
-		print("budget_usec:%s, overhead_usec:%s, expenditure_usec:%s, surplus_usec:%s, called:%s, waiting:%s" % [_frame_budget_usec, overhead_usec, frame_budget_expenditure_usec, frame_budget_surplus_usec, call_count, waiting_count])
+	#if _is_logging and call_count > 0:
+	if call_count > 0:
+		self.emit_signal("log", _frame_budget_usec, overhead_usec, frame_budget_expenditure_usec, frame_budget_surplus_usec, call_count, waiting_count)
 
 	self.emit_signal("waiting_count_change", waiting_count)
 

@@ -7,6 +7,8 @@ extends Node3D
 const _ball_scene : PackedScene = preload("res://example/Ball/ball.tscn")
 
 @onready var _ball_holder : Node = $BallHolder
+
+@onready var _is_logging : bool = $CheckBoxLog.button_pressed
 @onready var _is_artificial_delay : bool = $CheckBoxArtificialDelay.button_pressed
 @onready var _is_remove_balls_when_over_frame_budget : bool = $CheckBoxRemove100.button_pressed
 @onready var _is_remove_all_balls : bool = $CheckBoxRemoveAll.button_pressed
@@ -19,10 +21,16 @@ func _ready() -> void:
 	var frame_budget_usec := floori(1000000 / float(Engine.get_physics_ticks_per_second()))
 	var frame_budget_threshold_usec := 5000
 	CallThrottled.start(frame_budget_usec, frame_budget_threshold_usec)
+
+	CallThrottled.connect("log", Callable(self, "_on_log"))
 	CallThrottled.connect("waiting_count_change", Callable(self, "_on_waiting_count_change"))
 	CallThrottled.connect("engine_not_busy", Callable(self, "_on_engine_not_busy"))
 	CallThrottled.connect("engine_too_busy", Callable(self, "_on_engine_too_busy"))
 	CallThrottled.connect("over_frame_budget", Callable(self, "_on_over_frame_budget"))
+
+func _on_log(frame_budget_usec : int, overhead_usec : int, frame_budget_expenditure_usec : int, frame_budget_surplus_usec : int, call_count : int, waiting_count : int) -> void:
+	if not _is_logging: return
+	print("budget_usec:%s, overhead_usec:%s, expenditure_usec:%s, surplus_usec:%s, called:%s, waiting:%s" % [frame_budget_usec, overhead_usec, frame_budget_expenditure_usec, frame_budget_surplus_usec, call_count, waiting_count])
 
 func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
@@ -33,7 +41,7 @@ func _on_engine_not_busy(waiting_count : int) -> void:
 	$LabelBusy.hide()
 
 func _on_engine_too_busy(waiting_count : int) -> void:
-	print("--- Called _on_engine_too_busy waiting_count: %s" % [waiting_count])
+	#print("--- Called _on_engine_too_busy waiting_count: %s" % [waiting_count])
 	$LabelBusy.show()
 
 	# We are continuously over frame budget, so free all the balls
@@ -143,3 +151,7 @@ func _on_check_box_remove_100_pressed() -> void:
 
 func _on_check_box_remove_all_pressed() -> void:
 	_is_remove_all_balls = not _is_remove_all_balls
+
+
+func _on_check_box_log_pressed() -> void:
+	_is_logging = not _is_logging
