@@ -130,7 +130,7 @@ func start(frame_budget_usec : int, frame_budget_threshold_usec : int) -> void:
 		_fn_get_frame_start_ticks_usec = Callable(Engine, "get_frame_ticks")
 	else:
 		_fn_get_frame_start_ticks_usec = Callable(Time, "get_ticks_usec")
-	print("Using '%s' to get frame start time" % _fn_get_frame_start_ticks_usec)
+	print("GodotCallThrottled using '%s' to get frame start time" % _fn_get_frame_start_ticks_usec)
 
 	_frame_budget_usec = frame_budget_usec
 	_frame_budget_threshold_usec = frame_budget_threshold_usec
