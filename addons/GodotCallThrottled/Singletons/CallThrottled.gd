@@ -5,6 +5,7 @@
 extends Node
 
 const INT32_MAX := int(int(pow(2, 31)) - 1)
+const INT64_MAX := int(int(pow(2, 63)) - 1)
 
 signal log(frame_budget_usec : int, overhead_usec : int, frame_budget_expenditure_usec : int, frame_budget_surplus_usec : int, call_count : int, waiting_count : int)
 signal waiting_count_change(waiting_count : int)
@@ -57,7 +58,7 @@ func _main_iteration_start() -> void:
 func _main_iteration_done() -> void:
 	_main_iteration_end_ticks = Time.get_ticks_usec()
 	#if _is_logging: print("    _main_iteration_done: %s" % [_main_iteration_end_ticks])
-	var overhead_usec := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT32_MAX)
+	var overhead_usec := clampi(_main_iteration_end_ticks - _main_iteration_start_ticks, 0, INT64_MAX)
 	#if _is_logging: print("    overhead_usec: %s" % [overhead_usec])
 
 	# Run callables
@@ -65,7 +66,7 @@ func _main_iteration_done() -> void:
 		self._run_callables(overhead_usec)
 
 func _run_callables(overhead_usec : int) -> void:
-	var frame_budget_surplus_usec := clampi(_frame_budget_usec - overhead_usec, 0, INT32_MAX)
+	var frame_budget_surplus_usec := clampi(_frame_budget_usec - overhead_usec, 0, INT64_MAX)
 	var frame_budget_expenditure_usec := 0
 	var is_working := true
 	var call_count := 0
@@ -94,9 +95,9 @@ func _run_callables(overhead_usec : int) -> void:
 				call_count += 1
 
 		var after := Time.get_ticks_usec()
-		var used := clampi(after - before, 0, INT32_MAX)
-		frame_budget_surplus_usec = clampi(frame_budget_surplus_usec - used, 0, INT32_MAX)
-		frame_budget_expenditure_usec = clampi(frame_budget_expenditure_usec + used, 0, INT32_MAX)
+		var used := clampi(after - before, 0, INT64_MAX)
+		frame_budget_surplus_usec = clampi(frame_budget_surplus_usec - used, 0, INT64_MAX)
+		frame_budget_expenditure_usec = clampi(frame_budget_expenditure_usec + used, 0, INT64_MAX)
 
 		# Stop running callables if there are none left, or we are over budget
 		if not did_call or frame_budget_surplus_usec < _frame_budget_threshold_usec:
@@ -120,7 +121,7 @@ func _run_callables(overhead_usec : int) -> void:
 		_is_too_busy_to_work = true
 		self.emit_signal("engine_too_busy", waiting_count)
 
-	var used_usec := clampi(Time.get_ticks_usec() - _main_iteration_start_ticks, 0, INT32_MAX)
+	var used_usec := clampi(Time.get_ticks_usec() - _main_iteration_start_ticks, 0, INT64_MAX)
 	if used_usec > _frame_budget_usec:
 		self.emit_signal("over_frame_budget", used_usec, _frame_budget_usec)
 
