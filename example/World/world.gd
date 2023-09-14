@@ -36,11 +36,11 @@ func _on_waiting_count_change(waiting_count : int) -> void:
 	var label = $LabelWaitingCount
 	label.text = "Waiting calls: %s" % [waiting_count]
 
-func _on_engine_not_busy(waiting_count : int) -> void:
+func _on_engine_not_busy(_waiting_count : int) -> void:
 	#print("+++ Called _on_engine_not_busy waiting_count: %s" % [waiting_count])
 	$LabelBusy.hide()
 
-func _on_engine_too_busy(waiting_count : int) -> void:
+func _on_engine_too_busy(_waiting_count : int) -> void:
 	#print("--- Called _on_engine_too_busy waiting_count: %s" % [waiting_count])
 	$LabelBusy.show()
 
