@@ -94,9 +94,9 @@ func _run_callables(overhead_usec : float) -> void:
 				call_count += 1
 
 		var after := Time.get_ticks_usec()
-		var used := after - before
-		frame_budget_surplus_usec -= used
-		frame_budget_expenditure_usec += used
+		var used := clampi(after - before, 0, INT32_MAX)
+		frame_budget_surplus_usec = clampi(frame_budget_surplus_usec - used, 0, INT32_MAX)
+		frame_budget_expenditure_usec = clampi(frame_budget_expenditure_usec + used, 0, INT32_MAX)
 
 		# Stop running callables if there are none left, or we are over budget
 		if not did_call or frame_budget_surplus_usec < _frame_budget_threshold_usec:
