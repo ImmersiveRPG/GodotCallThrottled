@@ -64,7 +64,7 @@ func _main_iteration_done() -> void:
 	if _is_setup:
 		self._run_callables(overhead_usec)
 
-func _run_callables(overhead_usec : float) -> void:
+func _run_callables(overhead_usec : int) -> void:
 	var frame_budget_surplus_usec := clampi(_frame_budget_usec - overhead_usec, 0, INT32_MAX)
 	var frame_budget_expenditure_usec := 0
 	var is_working := true
