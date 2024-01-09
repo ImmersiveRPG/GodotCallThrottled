@@ -28,6 +28,7 @@ var _is_setup := false
 var _was_working := false
 var _is_too_busy_to_work := false
 var _fn_get_frame_start_ticks_usec : Callable
+var _prev_waiting_count := -1
 
 func _on_start_physics_frame() -> void:
 	#if _is_logging: print("Frame: %s" % [self.get_tree().get_frame()])
@@ -111,7 +112,8 @@ func _run_callables(overhead_usec : int) -> void:
 	if call_count > 0:
 		self.emit_signal("log", _frame_budget_usec, overhead_usec, frame_budget_expenditure_usec, frame_budget_surplus_usec, call_count, waiting_count)
 
-	self.emit_signal("waiting_count_change", waiting_count)
+	if waiting_count != _prev_waiting_count:
+		self.emit_signal("waiting_count_change", waiting_count)
 
 	if _is_too_busy_to_work and not _was_working and did_work:
 		_is_too_busy_to_work = false
@@ -125,6 +127,7 @@ func _run_callables(overhead_usec : int) -> void:
 	if used_usec > _frame_budget_usec:
 		self.emit_signal("over_frame_budget", used_usec, _frame_budget_usec)
 
+	_prev_waiting_count = waiting_count
 	_was_working = did_work
 
 func start(frame_budget_usec : int, frame_budget_threshold_usec : int) -> void:
