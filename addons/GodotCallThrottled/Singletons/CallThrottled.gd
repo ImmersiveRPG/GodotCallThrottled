@@ -86,7 +86,7 @@ func _run_callables(overhead_usec : int) -> void:
 		if entry:
 			var callable = entry["callable"]
 			var args = entry["args"]
-			if callable != null and callable.is_valid():
+			if callable != null and callable.is_valid() and not callable.is_null():
 				if args != null and typeof(args) == TYPE_ARRAY and not args.is_empty():
 					callable.callv(args)
 				else:
@@ -94,6 +94,8 @@ func _run_callables(overhead_usec : int) -> void:
 				did_work = true
 				did_call = true
 				call_count += 1
+			else:
+				push_error("Callable not valid or missing target to call")
 
 		var after := Time.get_ticks_usec()
 		var used := clampi(after - before, 0, INT64_MAX)
